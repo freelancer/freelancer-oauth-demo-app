@@ -1,0 +1,56 @@
+{% set active_page = "project" %}
+{% extends "settings.layout.html" %}
+{% block content %}
+<form id="create_app" class="SectionSettings-main Card fl-form" method="POST" enctype="multipart/form-data" action="">
+    <header class="SectionSettings-main-header">
+        <h1 class="SectionSettings-main-title">
+            Post a Project
+        </h1>
+        <div class="SectionSettings-main-text">
+            Want to post a project in your area? Fill out this form and your project will be posted instantly to www.freelancer-sandbox.com!
+        </div>
+    </header>
+
+    <div class="SectionSettings-main-body">
+        <h2 class="SectionSettings-main-subTitle">
+            Your Project
+        </h2>
+        <div class="SectionSettings-main-row">
+            <div class="SectionSettings-main-desc">
+                What service do you want done?
+            </div>
+            <div class="SectionSettings-main-value form-step">
+                <input type="text" name="service" maxlength="200" value="" placeholder="What needs to get done?" required>
+            </div>
+        </div>
+
+        <div class="SectionSettings-main-row">
+            <div class="SectionSettings-main-desc">
+                Where do you want this service delivered?
+            </div>
+            <div class="SectionSettings-main-value form-step">
+                <input type="text" name="location" maxlength="200" value="" placeholder="What's your location?" required>
+            </div>
+        </div>
+
+        <div class="SectionSettings-main-row">
+            <div class="SectionSettings-main-desc">
+                What is your budget for the service? (In USD, numbers only)
+            </div>
+            <div class="SectionSettings-main-value form-step">
+                <input type="text" name="budget" maxlength="1000" value="" placeholder="10" required>
+            </div>
+        </div>
+        <div class="SectionSettings-main-row">
+            <div id="error-placeholder">
+            {% if message %}
+            {{message}}
+            {% endif %}
+            </div>
+            <button type="submit" formmethod="post" class="SectionSettings-main-cta btn btn-success">
+                Post my project!
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}

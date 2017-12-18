@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/build/css/fonts/roboto-bold/Roboto-700.eot');
+  src: url('/build/css/fonts/roboto-bold/Roboto-700.eot?#iefix') format('embedded-opentype'),
+       local('Roboto Bold'),
+       local('Roboto-700'),
+       url('/build/css/fonts/roboto-bold/Roboto-700.woff2') format('woff2'),
+       url('/build/css/fonts/roboto-bold/Roboto-700.woff') format('woff'),
+       url('/build/css/fonts/roboto-bold/Roboto-700.ttf') format('truetype'),
+       url('/build/css/fonts/roboto-bold/Roboto-700.svg#Roboto') format('svg');
+}

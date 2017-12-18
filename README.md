@@ -1,7 +1,9 @@
-# Identity Demo Application #
+# Demo OAuth Client for Freelancer.com API
 
 The Identity Demo Application is a demonstration app which authenticates against 
 accounts.freelancer-sandbox.com to allow a user to post projects via the Freelancer.com API.
+
+See https://developers.freelancer.com/ to learn more.
 
 
 ## Getting Started ##
@@ -45,4 +47,3 @@ $ python client.py
 Congratulations, you now have an OAuth client application running on your machine!
 
 Navigate to http://127.0.0.1:8080/ to view your OAuth client application.
-# freelancer-oauth-demo-app

@@ -1,0 +1,33 @@
+{% set active_page = "/" %}
+{% extends "settings.layout.html" %}
+{% block content %}
+<div id="account" class="SectionSettings-main Card">
+    <header class="SectionSettings-main-header">
+        <h1 class="SectionSettings-main-title">
+            Welcome to {{client_name}}
+        </h1>
+    </header>
+    <div class="SectionSettings-main-body">
+        <h2 class="SectionSettings-main-subTitle">
+            User Information:
+        </h2>
+        <div class="SectionSettings-main-row">
+            <div class="SectionSettings-main-desc">
+                Username:
+            </div>
+            <div class="SectionSettings-main-value">
+                {{ username }}
+            </div>
+        </div>
+        <div class="SectionSettings-main-row">
+            <div class="SectionSettings-main-desc">
+                Name:
+            </div>
+            <div class="SectionSettings-main-value">
+                {{ first_name }} {{ last_name }}
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+{% endblock %}
