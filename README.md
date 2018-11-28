@@ -24,7 +24,7 @@ $ pip install -e .
 
 ### Setting up your client ###
 In order to run your server, you need to register a client application with 
-[accounts.freelancer-sandbox.com](https://account.freelancer-sandbox.com).
+[accounts.freelancer-sandbox.com](https://accounts.freelancer-sandbox.com).
 
 For the purposes of testing, this code runs a server on localhost, and therefore uses a 
 redirect_uri of http://127.0.0.1:8080/authorized. If you want to use this behaviour, you must register your 
