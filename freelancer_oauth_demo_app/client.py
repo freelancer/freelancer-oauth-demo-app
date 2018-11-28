@@ -1,3 +1,6 @@
+import json
+import os
+
 from flask import (
     Flask,
     url_for,
@@ -8,23 +11,17 @@ from flask import (
     render_template,
     Markup,
 )
-
 from flask_login import current_user
 from flask_oauthlib.client import OAuth
 import flask
 import flask_login
-import json
-import os
 import requests
 
+from config import CONFIG
+
 # client and user should be added prior testing
-client_name = "<CLIENT_NAME>"
-client_id = "<CLIENT_ID>"
-client_secret = "<CLIENT_SECRET>"
-client_redirect = "http://127.0.0.1:8080/authorized"
-server_base_url = "https://accounts.freelancer-sandbox.com/"
-oauth_base_url = "{}/oauth/".format(server_base_url)
-api_base_url = "{}/api/v1/".format(server_base_url)
+OAUTH_BASE_URL = "{server_base_url}/oauth/".format(**CONFIG)
+API_BASE_URL = "{server_base_url}/api/v1/".format(**CONFIG)
 
 app = Flask(
     __name__, template_folder="templates", static_folder="static", static_url_path=""
@@ -38,12 +35,12 @@ login_manager.login_view = "handle_login"
 login_manager.init_app(app)
 
 remote = oauth.remote_app(
-    server_base_url,
-    consumer_key=client_id,
-    consumer_secret=client_secret,
-    base_url=server_base_url,
-    access_token_url="{}/token".format(oauth_base_url),
-    authorize_url="{}/authorise".format(oauth_base_url),
+    CONFIG["server_base_url"],
+    consumer_key=CONFIG["client_id"],
+    consumer_secret=CONFIG["client_secret"],
+    base_url=CONFIG["server_base_url"],
+    access_token_url="{}/token".format(OAUTH_BASE_URL),
+    authorize_url="{}/authorise".format(OAUTH_BASE_URL),
 )
 
 ###############################################################################
@@ -112,7 +109,7 @@ def index():
     """
     if "access_token" in session:
         freelancer_user_info = current_user.info
-        client_info = {"client_name": client_name}
+        client_info = {"client_name": CONFIG["client_name"]}
         if freelancer_user_info and client_info:
             page_data = dict()
             page_data.update(freelancer_user_info)
@@ -120,8 +117,7 @@ def index():
             return render_template("/home.html", **page_data)
         else:
             return handle_logout()
-    else:
-        return handle_logout()
+    return handle_logout()
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -135,7 +131,7 @@ def handle_login():
         return login_redir()
 
     if request.method == "GET":
-        client_info = {"client_name": client_name}
+        client_info = {"client_name": CONFIG["client_name"]}
         return render_template(
             "/login.html", error=request.args.get("error"), **client_info
         )
@@ -143,7 +139,7 @@ def handle_login():
     prompt = "select_account"
     advanced_scopes = "1 6"
     return remote.authorize(
-        callback=client_redirect,
+        callback=CONFIG["client_redirect"],
         prompt=prompt,
         advanced_scopes=advanced_scopes,
         scope="basic",
@@ -202,7 +198,7 @@ def revoke_token():
     """Revokes the current OAuth access token both locally and on the remote host."""
     if "access_token" in session:
         data = {"token_type_hint": "access_token", "token": session["access_token"]}
-        url = "{}revoke".format(server_base_url)
+        url = "{server_base_url}revoke".format(**CONFIG)
         resp = remote.post(url=url, data=data)
         if resp.status == 200:
             clear_token()
@@ -224,10 +220,15 @@ def refresh_token():
     access and refresh token were previously generated for.
     """
     if "refresh_token" in session:
-        args = ("basic", session.get("refresh_token")[0], client_id)
+        args = ("basic", session.get("refresh_token")[0], CONFIG["client_id"])
         url = (
-            "token?grant_type=refresh_token" "&scope={}&refresh_token={}&client_id={}"
-        ).format("basic", session.get("refresh_token")[0], client_id)
+            "token?grant_type=refresh_token"
+            "&scope={scope}&refresh_token={refresh_token}&client_id={client_id}"
+        ).format(
+            scope="basic",
+            refresh_token=session.get("refresh_token")[0],
+            client_id=CONFIG["client_id"],
+        )
         resp = remote.get(url)
         if resp.status == 200:
             session["access_token"] = (resp.data["access_token"],)
@@ -248,8 +249,8 @@ def client_credentials_grant():
     property can get access token with client credentials
     """
     url = (
-        "{}token?grant_type=client_credentials" "&client_id={}&client_secret={}"
-    ).format(server_base_url, client_id, client_secret)
+        "{server_base_url}token?grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}"
+    ).format(**CONFIG)
 
     resp, content = remote.http_request(uri=url, method="GET")
 
@@ -329,7 +330,7 @@ def return_token():
 def explain_token_scope(access_token):
     if "access_token" in session:
         resp = remote.get(
-            "{}user/scope/{}".format(api_base_url, session.get("access_token")[0])
+            "{}user/scope/{}".format(API_BASE_URL, session.get("access_token")[0])
         )
         return jsonify(resp.data)
 
@@ -343,7 +344,7 @@ def user_get():
     The current user is determined from the session OAuth access token
     """
     if "access_token" in session:
-        url = "{}user".format(api_base_url)
+        url = "{}user".format(API_BASE_URL)
         resp = remote.get(url=url)
         if resp.status == 200:
             return jsonify(resp.data)
