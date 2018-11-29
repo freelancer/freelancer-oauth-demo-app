@@ -7,7 +7,7 @@ setup(
     name="freelancer_oauth_demo_app",
     author="Freelancer.com",
     author_email="sharding@freelancer.com",
-    version="0.1",
+    version="0.2",
     description="Freelancer Demonstration OAuth Application",
     install_requires=[
         "Flask==0.12.3",
