@@ -8,5 +8,5 @@ CONFIG = {
     "client_id": "<CLIENT_ID>",
     "client_secret": "<CLIENT_SECRET>",
     "client_redirect": "http://127.0.0.1:8080/authorized",
-    "server_base_url": "https://accounts.freelancer-sandbox.com/",
+    "server_base_url": "https://accounts.freelancer-sandbox.com",
 }

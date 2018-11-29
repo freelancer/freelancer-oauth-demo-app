@@ -20,8 +20,8 @@ import requests
 from config import CONFIG
 
 # client and user should be added prior testing
-OAUTH_BASE_URL = "{server_base_url}/oauth/".format(**CONFIG)
-API_BASE_URL = "{server_base_url}/api/v1/".format(**CONFIG)
+OAUTH_BASE_URL = "{server_base_url}/oauth".format(**CONFIG)
+API_BASE_URL = "{server_base_url}/api/v1".format(**CONFIG)
 
 app = Flask(
     __name__, template_folder="templates", static_folder="static", static_url_path=""
@@ -160,7 +160,7 @@ def authorized():
     resp = remote.authorized_response()
     if resp is None:
         return "Access denied: reason={} error={}".format(
-            request.args["error_reason"], request.args["error_description"]
+            request.args.get("error_reason"), request.args.get("error_description")
         )
     session["access_token"] = (resp["access_token"],)
     session["refresh_token"] = (resp["refresh_token"],)
